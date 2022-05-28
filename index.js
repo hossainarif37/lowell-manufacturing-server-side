@@ -33,6 +33,17 @@ async function run() {
             const result = await productCollection.findOne(query);
             res.send(result);
         });
+        app.post('/create-payment-intent', async (req, res) => {
+            const order = await req.body;
+            const amount = await order.totalCost || 500;
+            // console.log(amount)
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: parseInt(amount),
+                currency: 'usd',
+                payment_method_types: ['card']
+            });
+            res.send({ clientSecret: paymentIntent.client_secret })
+        });
 
     } finally {
         //   await client.close();
