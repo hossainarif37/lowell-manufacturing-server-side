@@ -44,6 +44,11 @@ async function run() {
             });
             res.send({ clientSecret: paymentIntent.client_secret })
         });
+        app.post('/order', async (req, res) => {
+            const product = req.body;
+            const result = await orderCollection.insertOne(product);
+            res.send(result);
+        });
 
     } finally {
         //   await client.close();
